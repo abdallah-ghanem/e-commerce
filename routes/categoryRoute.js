@@ -25,13 +25,14 @@ router.route('/').get(getCategories)
 router
     .route('/:id')//same name frm contrlloer
     .get( getCategory)//getCategoryValidator,
-    /* .put(
-        authService.protect,
+    .put(
+        /* authService.protect,
         authService.allowedTo('admin', 'manager'),
         uploadCategoryImage,
         resizeImage,
-        updateCategoryValidator,
+        updateCategoryValidator, */
         updateCategory
-    ) */
+    )
+    .delete(deleteCategory)
 
 module.exports = router;

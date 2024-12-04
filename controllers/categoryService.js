@@ -56,11 +56,29 @@ exports.createCategory = asyncHandler(async (req, res) => {
 });
 
 //====================================================================================================
+// @desc    Update specific category
+// @route   PUT /api/v1/categories/:id
+// @access  Private/Admin-Manager
+exports.updateCategory = asyncHandler(async(req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
+    const category = await Category.findOneAndUpdate({_id : id},{name , slug: slugify(name)},{new:true});//get product from id and edit name and slug
+    if (!category) {
+        res.status(404).json({ msg: `No category for this id ${id}` });
+    }
+    res.status(200).json({ data: category});
+});
 //====================================================================================================
+// @desc    Delete specific category
+// @route   DELETE /api/v1/categories/:id
+// @access  Private/Admin
+exports.deleteCategory = asyncHandler(async(req, res) => {
+    const { id } = req.params;
+    const category = await Category.findByIdAndDelete(id);
+    if (!category) {
+        res.status(404).json({ msg: `No category for this id ${id}` });
+    }
+    res.status(204).send();
+});
 //====================================================================================================
-//====================================================================================================
-//====================================================================================================
-//====================================================================================================
-//====================================================================================================
-//====================================================================================================
-//====================================================================================================
+

@@ -24,9 +24,34 @@ app.use(express.json({ limit: '20kb' }));//use to convert string from database t
 //====================================================================================================
 //call routes
 const categoryRoute = require('./routes/categoryRoute');
+const { rawListeners } = require("./models/catigoryModel");
 app.use('/api/v1/catigories', categoryRoute);
 //====================================================================================================
+//search at all rout previos it not exist send this message
+//create error and send to handel middilware to show
+const ApiError = require('./utils/apiError');
+app.all('*', (req, res, next) => {
+  /* const err = new Error(`Can't find this route: ${req.originalUrl}`);
+  next(err.message); */
+  next(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));
+});
 //====================================================================================================
+//Global error handling middelware in express to handel the error to make it error easy to read
+const globalError = require('./middlewares/errorMiddleware');
+app.use(globalError);
+
+/* app.use((err , req , res , next) => {
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || 'error';
+  
+  res.status(err.statusCode).json({
+    status: err.status,
+    error: err,
+    message: err.message,
+    stack: err.stack,
+  });
+  //res.status(500).json({err})
+}) */
 //====================================================================================================
 //====================================================================================================
 //====================================================================================================
