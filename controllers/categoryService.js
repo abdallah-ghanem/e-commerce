@@ -34,7 +34,7 @@ exports.getCategory = asyncHandler(async (req, res, next) => {
 // @route   POST  /api/v1/categories
 // @access  Private/Admin-Manager
 exports.createCategory = asyncHandler(async (req, res) => {
-    const name = req.body.name;
+    const {name} = req.body;//get the name from all data in DB
     // async await
     const category = await CategoryModel.create({ name, slug: slugify(name) }); //slugify to convert space to -
     res.status(201).json({ data: category });
@@ -56,7 +56,6 @@ exports.createCategory = asyncHandler(async (req, res) => {
                 res.json(err);
                 }); */
 });
-
 //====================================================================================================
 // @desc    Update specific category
 // @route   PUT /api/v1/categories/:id
@@ -67,7 +66,7 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
     const category = await Category.findOneAndUpdate(
         { _id: id },
         { name, slug: slugify(name) },
-        { new: true }
+        { new: true }// used to return the modified document after the update operation. rather than the original document un Updated.
     ); //get product from id and edit name and slug
     if (!category) {
         //res.status(404).json({ msg: `No category for this id ${id}` });

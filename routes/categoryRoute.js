@@ -1,3 +1,4 @@
+/* eslint-disable import/newline-after-import */
 const express = require('express');
 const { param, validationResult } = require('express-validator');//to make layer validation 
 const router = express.Router();

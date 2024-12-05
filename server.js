@@ -1,5 +1,5 @@
+/* eslint-disable import/newline-after-import */
 const express = require("express");
-
 const app = express();
 require("dotenv").config();
 //====================================================================================================
@@ -11,7 +11,6 @@ const server = app.listen(PORT, () => {
 //====================================================================================================
 //to wrtie at terminal what methoud used
 const morgan = require("morgan");
-
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
   console.log(`mode: ${process.env.NODE_ENV}`);
@@ -19,7 +18,6 @@ if (process.env.NODE_ENV === "development") {
 //====================================================================================================
 //to call DB
 const dbConnection = require("./config/DB");
-
 dbConnection();
 //====================================================================================================
 // Middlewares
@@ -27,14 +25,14 @@ app.use(express.json({ limit: "20kb" })); //use to convert string from database 
 //====================================================================================================
 //call routes
 const categoryRoute = require("./routes/categoryRoute");
+const subCategoryRoute = require("./routes/subCategoryRoute");
 const { rawListeners } = require("./models/catigoryModel");
-
 app.use("/api/v1/catigories", categoryRoute);
+app.use("/api/v1/subCatigories", subCategoryRoute);
 //====================================================================================================
 //search at all rout previos it not exist send this message
 //create error and send to handel middilware to show
 const ApiError = require("./utils/apiError");
-
 app.all("*", (req, res, next) => {
   /* const err = new Error(`Can't find this route: ${req.originalUrl}`);
   next(err.message); */
@@ -43,7 +41,6 @@ app.all("*", (req, res, next) => {
 //====================================================================================================
 //Global error handling middelware in express to handel the error to make it error easy to read
 const globalError = require("./middlewares/errorMiddleware");
-
 app.use(globalError);
 
 /* app.use((err , req , res , next) => {
