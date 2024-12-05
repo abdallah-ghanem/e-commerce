@@ -1,0 +1,3 @@
+make this to enter here before enter to controller
+
+it is between route and controller

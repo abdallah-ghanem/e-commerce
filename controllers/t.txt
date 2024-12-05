@@ -1,2 +1,4 @@
 services=controllers
 api=routes
+
+pass this to routes

@@ -1,0 +1,3 @@
+THe files additonals to make handel of code like validator and error catch
+
+the foulder validator make to make clean code instead write this in route file (e-commerce\routes\categoryRoute.js)

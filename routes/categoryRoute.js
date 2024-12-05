@@ -1,7 +1,8 @@
 const express = require('express');
 const { param, validationResult } = require('express-validator');//to make layer validation 
 const router = express.Router();
-const {getCategoryValidator} = require("../utils/validator/categoryValidator");
+//take this functions from thiis foulder
+const {getCategoryValidator,createCategoryValidator,updateCategoryValidator,deleteCategoryValidator,} = require("../utils/validator/categoryValidator");
 
 const {
     getCategories,
@@ -18,8 +19,8 @@ router.route('/').get(getCategories)
         /* authService.protect,
         authService.allowedTo('admin', 'manager'),
         uploadCategoryImage,
-        resizeImage,
-        createCategoryValidator, */
+        resizeImage,*/
+        createCategoryValidator, //createCategoryValidator
         createCategory
     );
 
@@ -30,10 +31,10 @@ router
         /* authService.protect,
         authService.allowedTo('admin', 'manager'),
         uploadCategoryImage,
-        resizeImage,
-        updateCategoryValidator, */
+        resizeImage,*/
+        updateCategoryValidator, 
         updateCategory
     )
-    .delete(deleteCategory)
+    .delete(deleteCategoryValidator, deleteCategory)
 
 module.exports = router;

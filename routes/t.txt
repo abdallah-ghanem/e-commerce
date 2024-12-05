@@ -1,0 +1,1 @@
+Make this foluder to write in URI section in Brwoser and write methods after get from controllers (services)
