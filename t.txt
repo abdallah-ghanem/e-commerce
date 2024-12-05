@@ -1,0 +1,6 @@
+To help you in write download extentions like preittes
+auto table complete 
+eslint
+
+make save on format in setting
+make default format in setting preittes
