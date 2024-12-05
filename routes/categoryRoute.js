@@ -1,5 +1,5 @@
 const express = require('express');
-
+const { param, validationResult } = require('express-validator');//to make layer validation 
 const router = express.Router();
 
 const {
@@ -24,7 +24,16 @@ router.route('/').get(getCategories)
 
 router
     .route('/:id')//same name frm contrlloer
-    .get( getCategory)//getCategoryValidator,
+    .get(
+        //1-rules
+        param('id').isMongoId().withMessage("Error id"),
+        //2-middleware to catch error from fules
+        (req, res) => {
+    const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.status(400).json({result :result.array()});
+        }
+    }, getCategory)//getCategoryValidator,
     .put(
         /* authService.protect,
         authService.allowedTo('admin', 'manager'),

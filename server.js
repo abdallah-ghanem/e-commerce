@@ -53,6 +53,14 @@ app.use(globalError);
   //res.status(500).json({err})
 }) */
 //====================================================================================================
+// Handle rejection outside express if you forge .catch in any promises function
+process.on('unhandledRejection', (err) => {
+  console.error(`UnhandledRejection Errors: ${err.name} | ${err.message}`);
+  server.close(() => {
+    console.error(`Shutting down....`);
+    process.exit(1);
+  });
+});
 //====================================================================================================
 //====================================================================================================
 //====================================================================================================
