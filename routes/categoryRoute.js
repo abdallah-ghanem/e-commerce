@@ -4,7 +4,6 @@ const { param, validationResult } = require('express-validator');//to make layer
 const router = express.Router();
 //take this functions from thiis foulder
 const {getCategoryValidator,createCategoryValidator,updateCategoryValidator,deleteCategoryValidator,} = require("../utils/validator/categoryValidator");
-
 const {
     getCategories,
     getCategory,
@@ -24,6 +23,10 @@ router.route('/').get(getCategories)
         createCategoryValidator, //createCategoryValidator
         createCategory
     );
+
+//nested Route
+const subCategoryRoute = require("./subCategoryRoute");
+router.use('/:categoryId/subcategories', subCategoryRoute);
 
 router
     .route('/:id')//same name frm contrlloer

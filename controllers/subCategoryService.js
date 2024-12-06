@@ -3,6 +3,13 @@ const asyncHandler = require("express-async-handler"); //instead try catch and .
 const ApiError = require("../utils/apiError");
 const SubCategory = require("../models/subCategoryModel");//model make uper case
 //====================================================================================================
+exports.setCategoryIdToBody =  asyncHandler(async (req, res, next) => {
+    // Nested rout
+    if (!req.body.category) req.body.category = req.params.categoryId;
+    next();
+});
+
+// @desc    Get single subcategory  
 // @desc    Create subCategory
 // @route   POST  /api/v1/subcategories
 // @access  Private
@@ -13,15 +20,23 @@ exports.createSubCategory = asyncHandler(async (req, res) => {
     res.status(201).json({ data: subCategory });
 });
 //====================================================================================================
+// make filter middelware
+exports.makeFilterObj = (req, res, next)=>{
+    let filterObject = {};
+    if (req.query.categoryId) filterObject = { category: req.query.categoryId };
+    req.filterObject = filterObject;
+    next();
+}
 // @desc    Get list of subcategories
 // @route   GET /api/v1/subcategories
 // @access  Public
-exports.getSubCategories = asyncHandler(async (req, res) => {
+exports.getSubCategories = asyncHandler(async (req, res) => { 
     // page limit skip to show products in pages mini product in one page 5 products
     const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 5; // to make you enter the number or make defult number
+    const limit = req.query.limit * 1 || 6; // to make you enter the number or make defult number
     const skip = (page - 1) * limit; // (2-1) * 5 = 5       make skip for first 5 product and get the second 5 product
-    const subCategories = await SubCategory.find({}).skip(skip).limit(limit);
+        console.log(req.params)
+    const subCategories = await SubCategory.find(req.filterObject).skip(skip).limit(limit)/* .populate({path:"category", select:"name"}) */;
     res.status(200).json({ result: subCategories.length, page, data: subCategories }); //name result to count numbers of data at database
 });
 //====================================================================================================
@@ -30,7 +45,7 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
 // @access  Public
 exports.getSubCategory = asyncHandler(async (req, res, next) => {
     const { id } = req.params; //make this separeted to pass to routes
-    const subCategories = await SubCategory.findById(id);
+    const subCategories = await SubCategory.findById(id)/* .populate({path:"category", select:"name"}) */;
     if (!subCategories) {
         return next(new ApiError(`No subcategory for this id ${id}`, 404));
     }
@@ -47,7 +62,8 @@ exports.updateSubCategory = asyncHandler(async (req, res, next) => {
         { _id: id },
         { name, slug: slugify(name), category },
         { new: true }
-    ); //get product from id and edit name and slug
+    ) //get product from id and edit name and slug
+    /* .populate({path:"category", select:"name"}); */
     if (!subCategory) {
         return next(new ApiError(`No subcategory for this id ${id}`, 404));
     }

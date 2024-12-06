@@ -11,7 +11,7 @@ const ApiError = require("../utils/apiError");
 exports.getCategories = asyncHandler(async (req, res) => {
     // page limit skip to show products in pages mini product in one page 5 products
     const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 5; // to make you enter the number or make defult number
+    const limit = req.query.limit * 1 || 6; // to make you enter the number or make defult number
     const skip = (page - 1) * limit; // (2-1) * 5 = 5       make skip for first 5 product and get the second 5 product
     const categories = await CategoryModel.find({}).skip(skip).limit(limit);
     res.status(200).json({ result: categories.length, page, data: categories }); //name result to count numbers of data at database
