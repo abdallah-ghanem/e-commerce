@@ -27,10 +27,12 @@ app.use(express.json({ limit: "20kb" })); //use to convert string from database 
 const categoryRoute = require("./routes/categoryRoute");
 const subCategoryRoute = require("./routes/subCategoryRoute");
 const brandRoute = require("./routes/brandRoute");
+const productRoute = require("./routes/productRoute");
 const { rawListeners } = require("./models/catigoryModel");
 app.use("/api/v1/catigories", categoryRoute);
 app.use("/api/v1/subCatigories", subCategoryRoute);
 app.use("/api/v1/brands", brandRoute);
+app.use("/api/v1/products", productRoute);
 //====================================================================================================
 //search at all rout previos it not exist send this message
 //create error and send to handel middilware to show
