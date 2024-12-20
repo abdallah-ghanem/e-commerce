@@ -23,11 +23,17 @@ exports.getProducts = asyncHandler(async (req, res) => {
     const limit = req.query.limit * 1 || 10; // to make you enter the number or make defult number
     const skip = (page - 1) * limit; // (2-1) * 5 = 5       make skip for first 5 product and get the second 5 product
     
+    // 3) Sorting
+    const sort = req.query.sort ? req.query.sort.split(',').join(' ') : '-createdAt'; // Sort by fields or default to '-createdAt'
+
+    // 4) Field Limiting
+    const fields = req.query.fields ? req.query.fields.split(',').join(' ') : ''; // Limit fields to those specified by the user
+    
     const products = await Product.find(JSON.parse(queryStr))
         /* {//filter that ii need data to path to filter it ( .where('price').equals(req.query.price) ) (//req.query) (queryStringObj)
         price: req.query.price,
         ratingsAverage: req.query.ratingsAverage })  */
-    .skip(skip).limit(limit).populate({path: "category", select: "name -_id"}).sort(req.query.sort);//sort=price or -price
+    .skip(skip).limit(limit).populate({path: "category", select: "name -_id"}).sort(sort).select(fields);//sort=price or -price
     res.status(200).json({ result: products.length, page, data: products }); //name result to count numbers of data at database
 });
 //====================================================================================================
