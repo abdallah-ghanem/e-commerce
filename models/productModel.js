@@ -29,7 +29,7 @@ const ProductSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: [true, "Product price is required"],
-        max: [20, "Product price is high $0"],
+        max: [200000, "Product price is high $0"],
     },
     priceAfterDiscount: {
         type: Number,
@@ -48,7 +48,7 @@ const ProductSchema = new mongoose.Schema({
         ref: "Category",
         required: [true, "Product must belong to a category"],
     },
-    subCategory: {//must product ينتمي الي قسم ما يحتوي علي الف��ات
+    subCategories: {//must product ينتمي الي قسم ما يحتوي علي الف��ات
         type: mongoose.Schema.ObjectId,
         ref: "SubCategory",
         /* required: [true, "Product must belong to a subcategory"], */

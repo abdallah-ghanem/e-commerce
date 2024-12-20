@@ -6,7 +6,7 @@ require("dotenv").config();
 // express app
 const PORT = process.env.PORT || 6000;
 const server = app.listen(PORT, () => {
-  console.log(`App running running on port ${PORT}`);
+  console.log(`App running running on port http://localhost:${PORT}`);
 });
 //====================================================================================================
 //to wrtie at terminal what methoud used
@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === "development") {
 }
 //====================================================================================================
 //to call DB
-const dbConnection = require("./config/DB");
+const dbConnection = require("./config/DB"); 
 dbConnection();
 //====================================================================================================
 // Middlewares

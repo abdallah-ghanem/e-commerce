@@ -71,12 +71,12 @@ exports.createProductValidator = [
             })
         ),
 
-    check('subCategory')
+    check('subCategories')
         .optional()
         .isMongoId()
         .withMessage('Invalid ID formate')
         .custom((subcategoriesIds) =>
-            SubCategory.find({ _id: { $exists: true, $in: subcategoriesIds } }).then(
+            SubCategory.find({ _id: { $exists: true, $in: subcategoriesIds } }).then(//return all subcategory witj there id matching with id for subcategoies
                 (result) => {
                     if (result.length < 1 || result.length !== subcategoriesIds.length) {
                         return Promise.reject(new Error(`Invalid subcategories Ids`));
@@ -99,7 +99,7 @@ exports.createProductValidator = [
                         );
                     }
                 }
-            )
+            ) 
         ),
 
     check('brand').optional().isMongoId().withMessage('Invalid ID formate'),
