@@ -7,10 +7,27 @@ const Product = require("../models/productModel");
 // @route   GET /api/v1/products
 // @access  Public
 exports.getProducts = asyncHandler(async (req, res) => {
+    //1)filtering
+    const queryStringObj= { ...req.query } ;//to take copy
+    const excludesFields = ['limit','sort','fields','page'];//that i want to delet from req.query
+    excludesFields.forEach(field => delete queryStringObj[field]);//delete fields from query object
+    console.log(queryStringObj)
+    console.log(req.query);
+    // filtering gte=greterthan or equal
+    let queryStr=JSON.stringify(queryStringObj)
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`); //to make gte,gt,lte,lt as operators in mongodb query
+    console.log(queryStringObj)
+    console.log(JSON.parse(queryStr)); //to convert string query to object query in mongodb
+    //2)pagination
     const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 6; // to make you enter the number or make defult number
+    const limit = req.query.limit * 1 || 10; // to make you enter the number or make defult number
     const skip = (page - 1) * limit; // (2-1) * 5 = 5       make skip for first 5 product and get the second 5 product
-    const products = await Product.find({}).skip(skip).limit(limit).populate({path: "category", select: "name -_id"});
+    
+    const products = await Product.find(JSON.parse(queryStr))
+        /* {//filter that ii need data to path to filter it ( .where('price').equals(req.query.price) ) (//req.query) (queryStringObj)
+        price: req.query.price,
+        ratingsAverage: req.query.ratingsAverage })  */
+    .skip(skip).limit(limit).populate({path: "category", select: "name -_id"}).sort(req.query.sort);//sort=price or -price
     res.status(200).json({ result: products.length, page, data: products }); //name result to count numbers of data at database
 });
 //====================================================================================================
